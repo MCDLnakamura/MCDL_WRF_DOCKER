@@ -72,14 +72,6 @@ RUN curl -SL http://www2.mmm.ucar.edu/wrf/src/wps_files/geog_low_res_mandatory.t
 #
 RUN curl -SL http://www2.mmm.ucar.edu/wrf/src/namelists_v$NML_VERSION.tar.gz  | tar -xzC /wrf/wrfinput
 #
-# RUN curl -SL http://www2.mmm.ucar.edu/wrf/TUTORIAL_DATA/WRF_NCL_scripts.tar.gz | tar -xzC /wrf
-#
-# Download NCL
-#
-RUN curl -SL https://ral.ucar.edu/sites/default/files/public/projects/ncar-docker-wrf/nclncarg-6.3.0.linuxcentos7.0x8664nodapgcc482.tar.gz | tar zxC /usr/local
-ENV NCARG_ROOT /usr/local
-#
-#
 # Download wrf and wps source, Version 4.0 and later
 RUN curl -SL https://github.com/wrf-model/WPS/archive/v$WPS_VERSION.tar.gz | tar zxC /wrf \
  && curl -SL https://github.com/wrf-model/WRF/archive/v$WRF_VERSION.tar.gz | tar zxC /wrf
@@ -106,7 +98,7 @@ RUN ssh-keygen -f /wrf/.ssh/id_rsa -t rsa -N '' \
 #
 #
 VOLUME /wrf
-CMD ["/bin/tcsh"]
+CMD ["/bin/bash"]
 #
 
 USER root
