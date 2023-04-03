@@ -1,6 +1,6 @@
 #
 FROM centos:7
-MAINTAINER John Exby <exby@ucar.edu>
+# MAINTAINER John Exby <exby@ucar.edu>
 # 
 RUN curl -SL https://ral.ucar.edu/sites/default/files/public/projects/ncar-docker-wrf/ucar-bsd-3-clause-license.pdf > /UCAR-BSD-3-Clause-License.pdf
 #
@@ -26,8 +26,13 @@ RUN mkdir -p /var/run/sshd \
     && sed -i 's/#RSAAuthentication yes/RSAAuthentication yes/g' /etc/ssh/sshd_config \
     && sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/g' /etc/ssh/sshd_config
 #
-RUN groupadd wrf -g 9999
-RUN useradd -u 9999 -g wrf -G wheel -M -d /wrf wrfuser
+RUN groupadd -g 9999 wrf && \
+    useradd -m -s /bin/bash -u 9999 -g 9999 wrfuser && \
+    echo wrfuser:wrfuser | chpasswd && \
+    echo "wrfuser  ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+#
+# RUN groupadd wrf -g 9999
+# RUN useradd -u 9999 -g wrf -G wheel -M -d /wrf wrfuser
 #
 
 RUN mkdir /wrf \
@@ -101,4 +106,4 @@ VOLUME /wrf
 CMD ["/bin/bash"]
 #
 
-USER root
+RUN sudo yum install -y vim
