@@ -13,10 +13,22 @@ mkdir OUTPUT
 ```
 でコンテナを建てるディレクトリを用意したうえで、
 ```
-docker run -it --name="wrf" --mount type=bind,source="$(pwd)"/work/,target=/wrf/work wrf /bin/bash
+docker run -it --name="wrf" --mount type=bind,source="$(pwd)"/work/,target=/wrf/work  wrf /bin/bash
 ```
 で実行する。実行するときに-mountオプションをつけることで、dockerの内外でのファイルのやり取りを容易にする。
+dockerのコンテナから抜けるときは
+```
+Ctrl+P ⇒ Ctrl ＋Q
+```
+である。
+次回以降は
+```
+docker exec -it wrf /bin/bash
+```
+でログインする。この場合にシェルを抜けるだけなら、exitでよい。
 
+### 参考
+- https://qiita.com/TakahiroSakoda/items/5180ff9762ebddb0bd4d
 
 ## そのほかメモ 
 1. wrfをconfigureするときの数字は34と1
