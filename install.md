@@ -41,7 +41,5 @@ sudo systemctl start docker
 イメージの保管場所を自分のディレクトリに変更
 - https://vasteelab.com/2019/06/12/2019-06-12-143104/
 
-- sshでホストからログインする方法もファイルのやり取りには良さそう
-
 現時点では導入していないが、一般ユーザーで実行する方法もあるらしい
 - https://e-penguiner.com/rootless-docker-for-nonroot/

@@ -34,6 +34,9 @@ docker exec -it wrf /bin/bash
 1. wrfをconfigureするときの数字は34と1
 2. sudoかできるようにしてある。また、パスワードはwrfuserである。
 
+
+- sshでホストからログインする方法もファイルのやり取りには良さそう
+
 ## 元祖WRF_DOCKERからの変更点
 1. tcshではなくbashをターミナルに
 2. centosはlatestではなく、7を指定
