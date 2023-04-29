@@ -4,7 +4,7 @@ FROM centos:7
 # 
 RUN curl -SL https://ral.ucar.edu/sites/default/files/public/projects/ncar-docker-wrf/ucar-bsd-3-clause-license.pdf > /UCAR-BSD-3-Clause-License.pdf
 #
-ENV WRF_VERSION 4.0.3
+ENV WRF_VERSION 4.3.3
 ENV WPS_VERSION 4.0.2
 ENV NML_VERSION 4.0.2
 #
@@ -65,6 +65,8 @@ RUN mkdir -p /wrf/.openmpi
 RUN chown -R wrfuser:wrf /wrf/
 # RUN echo "root    ALL=(ALL)     ALL" >> /etc/sudoers
 #
+# Dockerfileファイル中に以下のような記述を追加し、8080番ポートを公開する
+# EXPOSE 8080
 #
 # all root steps completed above, now below as regular userID wrfuser
 USER wrfuser

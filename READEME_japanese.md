@@ -12,16 +12,19 @@ docker   build   -t   wrf  .
 mkdir OUTPUT
 ```
 でコンテナを建てるディレクトリを用意したうえで、
+<!-- docker run -it -privileged -p 2222:22  --name="wrf" --mount type=bind,source="$(pwd)"/work/,target=/wrf/work  wrf /bin/bash -->
 ```
-docker run -it --name="wrf" --mount type=bind,source="$(pwd)"/work/,target=/wrf/work  wrf /bin/bash
+docker run -d -it --name="wrf" --mount type=bind,source="$(pwd)"/work/,target=/wrf/work wrf /bin/bash 
 ```
-で実行する。実行するときに-mountオプションをつけることで、dockerの内外でのファイルのやり取りを容易にする。
-dockerのコンテナから抜けるときは
+で実行する。<br>
+-mountオプションをつけることで、dockerの内外でのファイルのやり取りを容易にする。<br>
+-dオプションをつけるとバックグラウンドで実行する。
+<!-- dockerのコンテナから抜けるときは
 ```
 Ctrl+P ⇒ Ctrl ＋Q
 ```
-である。
-次回以降は
+である。 -->
+コンテナに入るには
 ```
 docker exec -it wrf /bin/bash
 ```
