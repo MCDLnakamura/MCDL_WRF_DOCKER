@@ -2,7 +2,7 @@
 このディレクトリに存在するDockerfileは[WRF_DOCKER](https://github.com/NCAR/WRF_DOCKER)に私が普段使用している環境を模すために修正を加えたものです。<br>
 詳細はリンク先を確認してください。
 
-## DOCKERでWRFシミュレーションを回すまで、
+## 1. コンテナの作成から起動まで
 このディレクトリにおいて、
 ```
 docker   build   -t   wrf  .
@@ -30,6 +30,59 @@ docker exec -it wrf /bin/bash
 ```
 でログインする。この場合にシェルを抜けるだけなら、exitでよい。
 
+## 2. WRF, WRFDA, WPSのコンパイル
+基本的に木下さんのマニュアルを参考にしてある。<br>
+GUIにはまだ対応していないので、DomainWizardは別の場所で行うことを想定している。
+
+コンテナにログインしたら、
+```
+cd /wrf/WRF
+./configure
+```
+選択肢は、34と1を選択する。
+```
+./compile em_real 2>&1 |tee  compile.log
+```
+でコンパイルを行う。20分程かかる。
+
+また、WRFDAについても同様に
+```
+cd /wrf/WRFDA
+./configure wrfda
+```
+選択肢は、34を選択
+```
+./compile all_wrfvar 2>&1 |tee  compile.log
+```
+でコンパイルを行う。20分程かかる。<br>
+```
+ls -l var/build/*exe var/obsproc/src/obsproc.exe| wc -l
+```
+で44と出ればコンパイル成功である。
+
+WPSのコンパイルも同様に
+```
+cd /wrf/WPS
+./clean
+./configure
+```
+選択肢は、4を選択する。<br>
+この後、`vi /wrf/WPS/configure.wps`で
+```
+-L$(NETCDF)/lib  -lnetcdf
+```
+とある行を
+```
+-L$(NETCDF)/lib  -lnetcdff -lnetcdf
+```
+に変える。その後、
+```
+./compile 2>&1 | tee compile.log
+```
+でコンパイルを行う。2分ほどで終わる。<br>
+`ls -ls *.exe`で`ungrib.exe`と`metgrid.exe`と`geogrid.exe`のリンクが見えれば成功である。
+
+
 ### 参考
 - https://qiita.com/TakahiroSakoda/items/5180ff9762ebddb0bd4d
 
@@ -46,3 +99,4 @@ docker exec -it wrf /bin/bash
 3. リンク切れのファイルを変更(複数)
 4. チュートリアルデータの変更
 5. docker runのオプションを-vではなく、-mountに変更
+6. その他も多分あります

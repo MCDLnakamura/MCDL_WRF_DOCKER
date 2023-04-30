@@ -84,6 +84,7 @@ RUN curl -SL https://github.com/wrf-model/WPS/archive/v$WPS_VERSION.tar.gz | tar
  && curl -SL https://github.com/wrf-model/WRF/archive/v$WRF_VERSION.tar.gz | tar zxC /wrf
 RUN mv /wrf/WPS-$WPS_VERSION /wrf/WPS
 RUN mv /wrf/WRF-$WRF_VERSION /wrf/WRF
+RUN cp /wrf/WRF /wrf/WRFDA
 ENV NETCDF_classic 1
 #
 # 
@@ -97,7 +98,7 @@ ENV NETCDF_classic 1
 ENV LD_LIBRARY_PATH /usr/lib64/openmpi/lib
 ENV PATH  /usr/lib64/openmpi/bin:$PATH
 #
-#
+# sshの設定は良く分からない
 RUN ssh-keygen -f /wrf/.ssh/id_rsa -t rsa -N '' \
     && chmod 600 /wrf/.ssh/config \
     && chmod 700 /wrf/.ssh \
@@ -109,3 +110,4 @@ CMD ["/bin/bash"]
 #
 
 RUN sudo yum install -y vim
+RUN duso yum install -y git
