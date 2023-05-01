@@ -18,10 +18,12 @@ RUN yum -y install netcdf-openmpi-devel.x86_64 netcdf-fortran-openmpi-devel.x86_
     netcdf-fortran-openmpi.x86_64 hdf5-openmpi.x86_64 openmpi.x86_64 openmpi-devel.x86_64 \
    && yum clean all
 #
+# Added by Nakamura
+RUN yum -y install vim git unzip java
+#
 RUN groupadd -g 9999 wrf && \
     useradd -m -u 9999 -g 9999 wrfuser && \
     echo "wrfuser  ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-    # echo wrfuser:wrfuser | chpasswd && \
 
 RUN mkdir /wrf \
  &&  chown -R wrfuser:wrf /wrf \
@@ -86,5 +88,3 @@ ENV PATH  /usr/lib64/openmpi/bin:$PATH
 #
 VOLUME /wrf
 #
-RUN sudo yum install -y vim
-RUN sudo yum install -y git
