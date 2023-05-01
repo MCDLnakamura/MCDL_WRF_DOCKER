@@ -5,32 +5,43 @@
 ## 1. コンテナの作成から起動まで
 このディレクトリにおいて、
 ```
-docker   build   -t   wrf  .
+docker build -t wrf .
 ```
 でイメージを作成して、
 ```
-mkdir OUTPUT
+mkdir work
 ```
-でコンテナを建てるディレクトリを用意したうえで、
-<!-- docker run -it -privileged -p 2222:22  --name="wrf" --mount type=bind,source="$(pwd)"/work/,target=/wrf/work  wrf /bin/bash -->
+でファイルのやり取りをするディレクトリを用意したうえで、
 ```
-docker run -d -it --name="wrf" --mount type=bind,source="$(pwd)"/work/,target=/wrf/work wrf /bin/bash 
+docker run -itd --privileged -p 2222:22 --name wrf --mount type=bind,source="$(pwd)"/work/,target=/wrf/work wrf /sbin/init 
 ```
 で実行する。<br>
 -mountオプションをつけることで、dockerの内外でのファイルのやり取りを容易にする。<br>
 -dオプションをつけるとバックグラウンドで実行する。
-<!-- dockerのコンテナから抜けるときは
-```
-Ctrl+P ⇒ Ctrl ＋Q
-```
-である。 -->
+
 コンテナに入るには
 ```
 docker exec -it wrf /bin/bash
 ```
 でログインする。この場合にシェルを抜けるだけなら、exitでよい。
 
-## 2. WRF, WRFDA, WPSのコンパイル
+## 2. SSH接続の設定
+現在の設定では最初のログインは`root`でするようにしてある。
+`root`のパスワードは設定していないので、`passwd`コマンドを使って設定すること。
+また、`wrfuser`において`sudo`でほぼ全てのコマンドが使えるので、SSH接続が必要ない場合は、作業自体はログイン後に`su wrfuser`で切り替える方法で良い。その場合この節は飛ばして構わない。<br>
+SSH接続を使う場合はSSHサーバーを立ち上げる必要があるが、これが`root`でないと出来ない。SSHサーバーは
+```
+systemctl start sshd.service
+```
+で立ち上げることが出来る。これを行った場合、この後ホスト側のマシンから、
+```
+ssh -p 2222 wrfuser@localhost
+```
+でログインできるはずである。
+また、`wrfuser`のパスワードも同様に`passed`コマンドを使って設定すること。
+<!-- また、`wrfuser`のパスワードは`wrfuser`に設定してあるので、こちらも速やかに変更すること。 -->
+
+## 3. WRF, WRFDA, WPSのコンパイル
 基本的に木下さんのマニュアルを参考にしてある。<br>
 GUIにはまだ対応していないので、DomainWizardは別の場所で行うことを想定している。
 
